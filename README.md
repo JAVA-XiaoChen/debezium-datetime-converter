@@ -20,9 +20,25 @@ Debezium [custom converter](https://debezium.io/documentation/reference/developm
 # Usage
 
 1. [Download](https://github.com/holmofy/debezium-datetime-converter/releases) the extended jar package and put it in the same level directory of the debezium plugin.
-
+创建目录存放这个类
 2. In debezium-connector, Add the following configuration: 
-
+然后添加配置
+```properties
+Properties debeziumProperties = new Properties();
+// 自定义解释器
+// 设置解释器及解释器参数
+debeziumProperties.put("converters", "MySqlDateTimeConverter");
+debeziumProperties.put("MySqlDateTimeConverter.type", "io.debezium.connector.mysql.MySqlDateTimeConverter");
+debeziumProperties.put("MySqlDateTimeConverter.database.type", "mysql");
+// 自定义格式，可选，解析时间格式
+debeziumProperties.put("MySqlDateTimeConverter.format.datetime", "yyyy-MM-dd HH:mm:ss");
+debeziumProperties.put("MySqlDateTimeConverter.format.date", "yyyy-MM-dd");
+debeziumProperties.put("MySqlDateTimeConverter.format.time", "HH:mm:ss");
+// 解析数字类型格式
+debeziumProperties.setProperty("bigint.unsigned.handling.mode", "long");
+debeziumProperties.setProperty("decimal.handling.mode", "double");
+```
+或者
 ```properties
 connector.class=io.debezium.connector.mysql.MySqlConnector
 # ...
